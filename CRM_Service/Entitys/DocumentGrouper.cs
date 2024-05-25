@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CRM_Service.Enums;
 
 namespace CRM_Service.Entitys
 {
-    [Table("RolUser")]
-    public class RolUser
+    /// <summary>
+    /// Clase que representa a un usuario del sistema.
+    /// </summary>
+    [Table("DocumentGroup")]
+    public class DocumentGrouper
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Int64 Id { get; set; }
 
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
-
-        public DateTime? Created { get; set; }
+        public Int64 Consecutive { get; set; }
 
         [Required]
-        public StatusRol Status { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }

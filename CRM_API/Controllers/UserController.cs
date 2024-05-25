@@ -56,10 +56,10 @@ namespace CRM_API.Controllers
             return Ok(res);
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<UserLoginModel>> Login(UserInsertModel value)
-        {
+        //[HttpPost("login")]
+        //public async Task<ActionResult<UserLoginModel>> Login(UserInsertModel value)
+        //{
 
-        }
+        //}
     }
 }

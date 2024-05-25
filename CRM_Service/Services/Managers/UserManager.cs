@@ -38,13 +38,12 @@ namespace CRM_Service.Services.Managers
                 }
                 else
                 {
-                    // Cifrar la contraseña
                     string encryptedPassword = await securityBasic.Encrypt(poco.Password);
                     user.Password = encryptedPassword;
                 }
             }
             user.Phone = poco.Phone;
-            user.Addres = poco.Addres;
+            user.Address = poco.Addres;
             user.RolUserId = poco.RolUserId;
             context.Users.Add(user);
             await context.SaveChangesAsync();
