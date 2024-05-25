@@ -12,7 +12,7 @@ namespace CRM_Service.Entitys
     /// Clase que representa a un usuario del sistema.
     /// </summary>
     [Table("Page")]
-    public class Pages
+    public class Page
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

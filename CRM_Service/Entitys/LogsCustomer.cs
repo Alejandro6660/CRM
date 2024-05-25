@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CRM_Service.Entitys
 {
-    public class LogsCustomers
+    public class LogsCustomer
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -21,7 +21,7 @@ namespace CRM_Service.Entitys
 
         [ForeignKey("Customers")]
         public int CustomerId { get; set; }
-        public virtual Customers Customer { get; set; }
+        public virtual Customer? Customer { get; set; }
 
         public string? Coment { get; set; }
 

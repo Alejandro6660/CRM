@@ -14,7 +14,7 @@ namespace CRM_Service.Entitys
     /// Clase que representa a un usuario del sistema.
     /// </summary>
     [Table("logDocument")]
-    public class logsDocuments
+    public class logsDocument
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -26,7 +26,7 @@ namespace CRM_Service.Entitys
 
         [ForeignKey("Documents")]
         public int DocumentId { get; set; }
-        public virtual Documents Document { get; set; }
+        public virtual Document Document { get; set; }
 
         public string? Coment {  get; set; }
 

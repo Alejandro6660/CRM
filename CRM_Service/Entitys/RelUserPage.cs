@@ -12,7 +12,7 @@ namespace CRM_Service.Entitys
     /// Clase que representa a un usuario del sistema.
     /// </summary>
     [Table("RelUserPage")]
-    public class RelUserPages
+    public class RelUserPage
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,7 +24,7 @@ namespace CRM_Service.Entitys
 
         [ForeignKey("Page")]
         public Int64 PageId { get; set; }
-        public virtual Pages Page { get; set; }
+        public virtual Page? Page { get; set; }
 
         /// <summary>
         ///  Relacion con User
@@ -32,6 +32,6 @@ namespace CRM_Service.Entitys
 
         [ForeignKey("User")]
         public Int64 UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
     }
 }

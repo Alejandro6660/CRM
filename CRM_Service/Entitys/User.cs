@@ -59,14 +59,14 @@ namespace CRM_Service.Entitys
 
         [ForeignKey("Documents")]
         public long ImageId { get; set; }
-        public virtual Documents Image { get; set; }
+        public virtual Document? Image { get; set; }
         
         [ForeignKey("Documents")]
         public long DocumentId { get; set; }
-        public virtual Documents Signature { get; set; }
+        public virtual Document? Signature { get; set; }
 
         [ForeignKey("RolUser")]
         public int RolUserId { get; set; }
-        public virtual RolUser RolUser { get; set; }
+        public virtual RolUser? RolUser { get; set; }
     }
 }

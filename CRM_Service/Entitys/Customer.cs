@@ -14,7 +14,7 @@ namespace CRM_Service.Entitys
     /// Clase que representa a un usuario del sistema.
     /// </summary>
     [Table("Customer")]
-    public class Customers
+    public class Customer
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -100,6 +100,6 @@ namespace CRM_Service.Entitys
 
         [ForeignKey("Documents")]
         public long ImageId { get; set; } 
-        public virtual Documents Image { get; set; }
+        public virtual Document Image { get; set; }
     }
 }
