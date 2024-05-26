@@ -63,8 +63,8 @@ namespace CRM_Service.Entitys
         public int UnitOfMeasure { get; set; }
 
 
-        [ForeignKey("Documents")]
-        public Int64? Image { get; set; }
-        public virtual Document ImageEntity { get; set; }
+        [ForeignKey("ImageId")]
+        public Int64? ImageId { get; set; }
+        public virtual Document Document { get; set; }
     }
 }

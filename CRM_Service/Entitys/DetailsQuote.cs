@@ -38,7 +38,7 @@ namespace CRM_Service.Entitys
         [MaxLength]
         public string? ComentStatus { get; set; }
 
-        [ForeignKey("Product")]
+        [ForeignKey("ProductId")]
         public long? ProductId { get; set; }
         public virtual Product Product { get; set; }
     }

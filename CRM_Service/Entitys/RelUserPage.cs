@@ -22,7 +22,7 @@ namespace CRM_Service.Entitys
         ///  Relacion con Pages
         /// </summary>
 
-        [ForeignKey("Page")]
+        [ForeignKey("PageId")]
         public Int64 PageId { get; set; }
         public virtual Page? Page { get; set; }
 
@@ -30,7 +30,7 @@ namespace CRM_Service.Entitys
         ///  Relacion con User
         /// </summary>
 
-        [ForeignKey("User")]
+        [ForeignKey("UserId")]
         public Int64 UserId { get; set; }
         public virtual User? User { get; set; }
     }

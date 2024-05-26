@@ -27,5 +27,28 @@ namespace CRM_Service.Context
         public DbSet<logsDocument> logsDocuments { get; set; }
         public DbSet<Page> Pages { get; set; }
         public DbSet<RelUserPage> RelUserPages { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Document>()
+                .HasOne(d => d.UploadedByUser)
+                .WithMany()
+                .HasForeignKey(d => d.UploadedByUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Image)
+                .WithMany()
+                .HasForeignKey(u => u.ImageId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Signature)
+                .WithMany()
+                .HasForeignKey(u => u.SignatureId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

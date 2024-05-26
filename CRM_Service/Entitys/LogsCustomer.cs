@@ -15,12 +15,12 @@ namespace CRM_Service.Entitys
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int64 Id { get; set; }
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public Int64 UserId { get; set; }
         public virtual User User { get; set; }
 
-        [ForeignKey("Customers")]
-        public int CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
+        public Int64 CustomerId { get; set; }
         public virtual Customer? Customer { get; set; }
 
         public string? Coment { get; set; }

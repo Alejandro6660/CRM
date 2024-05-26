@@ -59,23 +59,23 @@ namespace CRM_Service.Entitys
         [MaxLength]
         public string? ComentStatus { get; set; }
 
-        [ForeignKey("User")]
+        [ForeignKey("UserId")]
         public long? UserId { get; set; }
         public virtual User? User { get; set; }
 
-        [ForeignKey("Customer")]
+        [ForeignKey("CustomerId")]
         public long? CustomerId { get; set; }
         public virtual Customer? Customer { get; set; }
 
-        [ForeignKey("DetailsSale")]
-        public long? DetailsSaleId { get; set; }
-        public virtual DetailsQuote? DetailsSale { get; set; }
+        [ForeignKey("DetailsQuoteId")]
+        public long? DetailsQuoteId { get; set; }
+        public virtual DetailsQuote? DetailsQuote { get; set; }
 
-        [ForeignKey("Document")]
+        [ForeignKey("DocumentId")]
         public long? DocumentId { get; set; }
         public virtual Document? Document { get; set; }
 
-        [ForeignKey("Incoterm")]
+        [ForeignKey("IncotermId")]
         public long? IncotermId { get; set; }
         public virtual Incoterm? Incoterm { get; set; }
     }

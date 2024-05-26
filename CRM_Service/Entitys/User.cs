@@ -57,16 +57,18 @@ namespace CRM_Service.Entitys
 
         public DateTime? CreatedDate { get; set; }
 
-        [ForeignKey("Documents")]
+        [ForeignKey("ImageId")]
         public long ImageId { get; set; }
         public virtual Document? Image { get; set; }
-        
-        [ForeignKey("Documents")]
-        public long DocumentId { get; set; }
+
+        [ForeignKey("SignatureId")]
+        public long SignatureId { get; set; }
         public virtual Document? Signature { get; set; }
 
-        [ForeignKey("RolUser")]
+
+        [ForeignKey("RolUserId")]
         public int RolUserId { get; set; }
         public virtual RolUser? RolUser { get; set; }
+
     }
 }

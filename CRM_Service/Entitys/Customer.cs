@@ -98,7 +98,7 @@ namespace CRM_Service.Entitys
         [MaxLength]
         public string? CommentStatus { get; set; }
 
-        [ForeignKey("Documents")]
+        [ForeignKey("ImageId")]
         public long ImageId { get; set; } 
         public virtual Document Image { get; set; }
     }

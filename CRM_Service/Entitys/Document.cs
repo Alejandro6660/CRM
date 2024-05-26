@@ -54,14 +54,16 @@ namespace CRM_Service.Entitys
         public bool IsDeleted { get; set; }
 
         [Required]
-        public StatusDocument Status { get; set; } 
+        public StatusDocument Status { get; set; }
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-        public virtual User User { get; set; }
+        [Required]
+        public Int64 UploadedByUserId { get; set; }
 
-        [ForeignKey("DocumentGrouper")]
-        public int GroupId { get; set; }
-        public virtual DocumentGrouper DocumentGrouper { get; set; }
+        [ForeignKey("UploadedByUserId")]
+        public virtual User UploadedByUser { get; set; }
+
+        [ForeignKey("DocumentGrouperId")]
+        public Int64 DocumentGrouperId { get; set; }
+        public virtual DocumentGrouper? DocumentGrouper { get; set; }
     }
 }
