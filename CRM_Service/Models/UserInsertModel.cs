@@ -37,8 +37,6 @@ namespace CRM_Service.Models
 
         public bool IsPayroll { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-
         public int RolUserId { get; set; }
 
         public Int64 ImageId { get; set; }

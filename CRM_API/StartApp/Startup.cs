@@ -11,6 +11,7 @@ namespace CRM_API.StartApp
     public static class Startup
     {
         private static readonly string _MyCors = "MyCors";
+
         public static WebApplication InitApp(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ namespace CRM_API.StartApp
             Configure(app);
             return app;
         }
+
         private static void ConfigureServices(WebApplicationBuilder builder)
         {
             builder.Services.AddControllers();
@@ -46,12 +48,12 @@ namespace CRM_API.StartApp
 
             builder.Services.AddScoped<IUserManager, UserManager>();
             builder.Services.AddScoped<ISecurityBasic, SecurityBasic>();
-            builder.Services.AddKeyedScoped<IGeneralManager<UserModel, UserInsertModel>, UserManager>("userServices");
+            builder.Services.AddScoped<IGeneralManager<UserModel, UserInsertModel>, UserManager>();
         }
 
         private static void Configure(WebApplication app)
         {
-            //Creador de tablas
+            // Ensure the database is up-to-date
             //using (var scope = app.Services.CreateScope())
             //{
             //    var context = scope.ServiceProvider.GetRequiredService<CRMContext>();
@@ -62,14 +64,27 @@ namespace CRM_API.StartApp
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
+                });
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts(); // Add HSTS headers in production
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
 
             app.UseCors(_MyCors);
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

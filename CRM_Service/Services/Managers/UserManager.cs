@@ -5,10 +5,13 @@ using CRM_Service.Models;
 using CRM_Service.Services.IManagers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Runtime.InteropServices.Marshalling;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,16 +19,14 @@ namespace CRM_Service.Services.Managers
 {
     public class UserManager : IUserManager, IGeneralManager<UserModel, UserInsertModel>
     {
-        private CRMContext context;
-        private ISecurityBasic securityBasic;
-        private IConfiguration configuration;
+        private readonly CRMContext context;
+        private readonly ISecurityBasic securityBasic;
+
         public UserManager(CRMContext context, ISecurityBasic securityBasic, IConfiguration configuration)
         {
             this.context = context;
             this.securityBasic = securityBasic;
-            this.configuration = configuration;
         }
-
         public async Task<Response> Create(UserInsertModel poco)
         {
             var res = new Response();
@@ -47,9 +48,11 @@ namespace CRM_Service.Services.Managers
                     user.Password = encryptedPassword;
                 }
             }
+            var rol = await General<RolUser, int>.GetObject(context, poco.RolUserId);
             user.Phone = poco.Phone;
             user.Address = poco.Address;
             user.RolUserId = poco.RolUserId;
+            user.RolUser = rol;
             user.ZIP = poco.ZIP;
             user.RFC = poco.RFC;
             user.CreatedDate = DateTime.Now;
@@ -92,6 +95,7 @@ namespace CRM_Service.Services.Managers
             if(value.Name != String.Empty && value.Name.Length > 3) { 
                 rol.Name = value.Name;
                 rol.Status = StatusRol.Active;
+                rol.Created = DateTime.Now;
                 context.RolUsers.Add(rol);
                 await context.SaveChangesAsync();
             }
@@ -121,7 +125,8 @@ namespace CRM_Service.Services.Managers
                         us.RolUser = rol.Name;
                         us.Initials = user.Initials;
                         us.PathImg = "";
-                        us.JWToken = "";
+                        string IdUsuario = user.Id.ToString();
+                        us.JWToken = await securityBasic.GetTokenJWT(IdUsuario, rol.Name);
                     }
                 }
                 else
@@ -145,7 +150,8 @@ namespace CRM_Service.Services.Managers
                         us.RolUser = rol.Name;
                         us.Initials = user.Initials;
                         us.PathImg = "";
-                        us.JWToken = "";
+                        string IdUsuario = user.Id.ToString();
+                        us.JWToken = await securityBasic.GetTokenJWT(IdUsuario, rol.Name);
                     }
                 }
                 else

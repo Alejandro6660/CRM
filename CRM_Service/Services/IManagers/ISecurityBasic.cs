@@ -10,5 +10,6 @@ namespace CRM_Service.Services.IManagers
     {
         Task<string> Encrypt(string password);
         Task<bool> VerifyPassword(string password, string hashedPassword);
+        Task<string>GetTokenJWT(string IdUsuario, string RolUsuario);
     }
 }
