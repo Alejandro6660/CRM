@@ -9,5 +9,6 @@ namespace CRM_Service.Services.IManagers
     public interface ISecurityBasic
     {
         Task<string> Encrypt(string password);
+        Task<bool> VerifyPassword(string password, string hashedPassword);
     }
 }

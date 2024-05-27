@@ -12,5 +12,6 @@ namespace CRM_Service.Services.IManagers
         Task<CRM_Service.Entitys.Response> CreateRol(RolUserInsertModel value);
         Task<CRM_Service.Entitys.Response> ValidateUserEmail (string email);
         Task<CRM_Service.Entitys.Response> ValidateUserPhone(string phone);
+         Task<UserModel>Login(UserLoginModel login);
     }
 }

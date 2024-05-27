@@ -8,5 +8,7 @@ namespace CRM_Service.Models
 {
     public class RolUserModel
     {
+        public string Name { get; set; }
+        public string Status {  get; set; }
     }
 }

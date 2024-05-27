@@ -56,10 +56,18 @@ namespace CRM_API.Controllers
             return Ok(res);
         }
 
-        //[HttpPost("login")]
-        //public async Task<ActionResult<UserLoginModel>> Login(UserInsertModel value)
-        //{
-
-        //}
+        [HttpPost("login")]
+        public async Task<ActionResult<UserModel>> Login(UserLoginModel value)
+        {
+            UserModel us = null;
+            try
+            {
+                us = await userManager.Login(value);
+            }catch (Exception ex)
+            {
+                return BadRequest("Error durante el inicio de sesión: " + ex.Message);
+            }
+            return us;
+        }
     }
 }

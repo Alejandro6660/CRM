@@ -4,6 +4,7 @@ using CRM_Service.Enums;
 using CRM_Service.Models;
 using CRM_Service.Services.IManagers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,12 @@ namespace CRM_Service.Services.Managers
     {
         private CRMContext context;
         private ISecurityBasic securityBasic;
-        public UserManager(CRMContext context, ISecurityBasic securityBasic)
+        private IConfiguration configuration;
+        public UserManager(CRMContext context, ISecurityBasic securityBasic, IConfiguration configuration)
         {
             this.context = context;
             this.securityBasic = securityBasic;
+            this.configuration = configuration;
         }
 
         public async Task<Response> Create(UserInsertModel poco)
@@ -28,6 +31,8 @@ namespace CRM_Service.Services.Managers
             var res = new Response();
             User user = new User();
             user.Name = poco.Name;
+            user.LastName = poco.LastName;
+            user.NameUser = poco.NameUser;
             user.Email = poco.Email;
             if (poco.RolUserId == 1)
             {
@@ -43,8 +48,13 @@ namespace CRM_Service.Services.Managers
                 }
             }
             user.Phone = poco.Phone;
-            user.Address = poco.Addres;
+            user.Address = poco.Address;
             user.RolUserId = poco.RolUserId;
+            user.ZIP = poco.ZIP;
+            user.RFC = poco.RFC;
+            user.CreatedDate = DateTime.Now;
+            user.IsPayroll = poco.IsPayroll;
+            user.PhoneEmergency = poco.PhoneEmergency;
             context.Users.Add(user);
             await context.SaveChangesAsync();
             return res;
@@ -81,7 +91,7 @@ namespace CRM_Service.Services.Managers
             RolUser rol = new RolUser();
             if(value.Name != String.Empty && value.Name.Length > 3) { 
                 rol.Name = value.Name;
-                rol.Status = value.Status != 0? value.Status : StatusRol.Active;
+                rol.Status = StatusRol.Active;
                 context.RolUsers.Add(rol);
                 await context.SaveChangesAsync();
             }
@@ -92,6 +102,58 @@ namespace CRM_Service.Services.Managers
             return res;
         }
 
-
+        public async Task<UserModel> Login(UserLoginModel login)
+        {
+            UserModel us = null; 
+            if(login.UserName != String.Empty)
+            {
+                var user = await context.Users.FirstOrDefaultAsync(p => p.NameUser == login.UserName);
+                if (user != null)
+                {
+                    if (await securityBasic.VerifyPassword(login.Password, user.Password))
+                    {
+                        var rol = await General<RolUser, int>.GetObject(context, user.RolUserId);
+                        us = new UserModel();
+                        us.Id = user.Id;
+                        us.Name = user.Name;
+                        us.LastName = user.LastName;
+                        us.NameUser = user.NameUser;
+                        us.RolUser = rol.Name;
+                        us.Initials = user.Initials;
+                        us.PathImg = "";
+                        us.JWToken = "";
+                    }
+                }
+                else
+                {
+                    throw new Exception("Usuario No existente.");
+                }
+            }
+            else
+            {
+                var user = await context.Users.FirstOrDefaultAsync(p => p.Email == login.Email);
+                if (user != null)
+                {
+                    if (await securityBasic.VerifyPassword(login.Password, user.Password))
+                    {
+                        var rol = await General<RolUser, int>.GetObject(context, user.RolUserId);
+                        us = new UserModel();
+                        us.Id = user.Id;
+                        us.Name = user.Name;
+                        us.LastName = user.LastName;
+                        us.NameUser = user.NameUser;
+                        us.RolUser = rol.Name;
+                        us.Initials = user.Initials;
+                        us.PathImg = "";
+                        us.JWToken = "";
+                    }
+                }
+                else
+                {
+                    throw new Exception("Usuario No existente.");
+                }
+            }
+            return us;
+        }
     }
 }

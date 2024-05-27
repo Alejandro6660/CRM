@@ -51,24 +51,24 @@ namespace CRM_Service.Entitys
 
 
         [MaxLength(100)]
-        public string? RFC { get; set; }
+        public string RFC { get; set; }
 
-        public bool? IsPayroll { get; set; }
+        public bool IsPayroll { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 
         [ForeignKey("ImageId")]
         public long ImageId { get; set; }
-        public virtual Document? Image { get; set; }
+        public virtual Document Image { get; set; }
 
         [ForeignKey("SignatureId")]
         public long SignatureId { get; set; }
-        public virtual Document? Signature { get; set; }
+        public virtual Document Signature { get; set; }
 
 
         [ForeignKey("RolUserId")]
         public int RolUserId { get; set; }
-        public virtual RolUser? RolUser { get; set; }
+        public virtual RolUser RolUser { get; set; }
 
     }
 }
