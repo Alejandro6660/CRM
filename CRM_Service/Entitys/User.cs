@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,12 +12,12 @@ namespace CRM_Service.Entitys
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
-        
+
         [Required]
         [MaxLength(100)]
         public string LastName { get; set; }
@@ -25,7 +25,7 @@ namespace CRM_Service.Entitys
         [Required]
         [MaxLength(100)]
         public string NameUser { get; set; }
-        
+
         [Required]
         [MaxLength(20)]
         public string Initials { get; set; }
@@ -39,13 +39,13 @@ namespace CRM_Service.Entitys
 
         [Required]
         public string Phone { get; set; }
-        
+
         [Required]
         public string PhoneEmergency { get; set; }
 
         [Required]
         public string Address { get; set; }
-        
+
         [Required]
         public string ZIP { get; set; }
 
@@ -56,19 +56,18 @@ namespace CRM_Service.Entitys
         public bool IsPayroll { get; set; }
 
         public DateTime? CreatedDate { get; set; }
+        public bool IsDelated { get; set; }
 
         [ForeignKey("ImageId")]
-        public long ImageId { get; set; }
+        public long? ImageId { get; set; }
         public virtual Document Image { get; set; }
 
         [ForeignKey("SignatureId")]
-        public long SignatureId { get; set; }
+        public long? SignatureId { get; set; }
         public virtual Document Signature { get; set; }
-
 
         [ForeignKey("RolUserId")]
         public int RolUserId { get; set; }
         public virtual RolUser RolUser { get; set; }
-
     }
 }

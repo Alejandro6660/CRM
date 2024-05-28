@@ -1,6 +1,7 @@
 ﻿using CRM_Service.Entitys;
 using CRM_Service.Models;
 using CRM_Service.Services.IManagers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.Xml;
@@ -19,6 +20,8 @@ namespace CRM_API.Controllers
             //this.ServiceGeneral = ServiceGeneral;
             this.ServiceUser = ServiceUser;
         }
+
+        [Authorize]
         [HttpPost("create")]
         public async Task<ActionResult<Response>> Create(RolUserInsertModel value)
         {
@@ -41,5 +44,23 @@ namespace CRM_API.Controllers
             }
             return res;
         }
+
+        [Authorize]
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IEnumerable<RolUserModel>>> GetAll()
+        {
+            IEnumerable<RolUserModel> roles = new List<RolUserModel>(); // Utiliza List<T> en lugar de IEnumerable<T>
+            try
+            {
+                roles = await ServiceUser.GetRol();
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(roles);
+        }
+
     }
 }

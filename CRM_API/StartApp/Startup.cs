@@ -2,9 +2,13 @@
 using CRM_Service.Models;
 using CRM_Service.Services.IManagers;
 using CRM_Service.Services.Managers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CRM_API.StartApp
 {
@@ -46,9 +50,34 @@ namespace CRM_API.StartApp
                 options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"));
             });
 
+            
+
             builder.Services.AddScoped<IUserManager, UserManager>();
             builder.Services.AddScoped<ISecurityBasic, SecurityBasic>();
-            builder.Services.AddScoped<IGeneralManager<UserModel, UserInsertModel>, UserManager>();
+            builder.Services.AddKeyedScoped<IGeneralManager<UserModel, UserInsertModel>, UserManager>("userServices");
+
+            var key = builder.Configuration.GetValue<string>("JwtSettings:key");
+            var keyBytes = Encoding.ASCII.GetBytes(key);
+
+            builder.Services.AddAuthentication(config =>
+            {
+                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(config =>
+            {
+                config.RequireHttpsMetadata = false;
+                config.SaveToken = true;
+                config.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                };
+            });
         }
 
         private static void Configure(WebApplication app)
@@ -85,6 +114,7 @@ namespace CRM_API.StartApp
             app.UseCors(_MyCors);
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllers();

@@ -3,6 +3,7 @@ using CRM_Service.Entitys;
 using CRM_Service.Enums;
 using CRM_Service.Models;
 using CRM_Service.Services.IManagers;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -35,6 +36,8 @@ namespace CRM_Service.Services.Managers
             user.LastName = poco.LastName;
             user.NameUser = poco.NameUser;
             user.Email = poco.Email;
+            user.Initials = poco.Initials;
+            user.IsDelated = false;
             if (poco.RolUserId == 1)
             {
                 if (string.IsNullOrEmpty(poco.Password))
@@ -160,6 +163,81 @@ namespace CRM_Service.Services.Managers
                 }
             }
             return us;
+        }
+
+        public async Task<Response> ValidateUsername(string UserName)
+        {
+            var res = new Response();
+            var user = await context.Users.FirstOrDefaultAsync(p => p.NameUser == UserName);
+
+            if (user != null)
+            {
+                res.Message = "User with this NameUser already exists.";
+                return res;
+            }
+            return res;
+        }
+
+        public async Task<Response> Delete(long Id)
+        {
+            var res = new Response();
+            var user = await General<User, Int64>.GetObject(context, Id);
+
+            if(user != null)
+            {
+                if(user.IsDelated == true)
+                {
+                    res.Code = 0;
+                    res.Message = "User no exist.";
+                }
+                else
+                {
+
+                }
+                user.IsDelated = true;
+                await context.SaveChangesAsync();
+            }
+            else
+            {
+                res.Code = 0;
+                res.Message = "User no exist.";
+            }
+            return res;
+        }
+
+        public async Task<IEnumerable<RolUserModel>> GetRol()
+        {
+
+            List<RolUserModel> roles = new List<RolUserModel>(); // Utiliza List<T> en lugar de IEnumerable<T>
+            var rols = await context.RolUsers.ToArrayAsync();
+            foreach (var r in rols)
+            {
+                var role = new RolUserModel();
+                role.Name = r.Name;
+                role.Status = r.Status == StatusRol.Active ? "Active" : "Inactive";
+                roles.Add(role); // Utiliza Add para agregar elementos a la lista en lugar de Aggregate
+            }
+
+            return roles;
+        }
+
+        public async Task<IEnumerable<GetUsersModel>> GetUsers()
+        {
+            List<GetUsersModel> Users = new List<GetUsersModel>();
+            var uss = await context.Users.ToArrayAsync();
+
+            foreach(var u in uss)
+            {
+                var rol = await General<RolUser, int>.GetObject(context, u.RolUserId);
+                GetUsersModel user = new GetUsersModel();
+                user.Id = u.Id;
+                user.Name = u.Name;
+                user.LastName = u.LastName;
+                user.RolUser = rol.Name;
+                user.Initials = u.Initials;
+                Users.Add(user);
+            }
+            return Users;
         }
     }
 }

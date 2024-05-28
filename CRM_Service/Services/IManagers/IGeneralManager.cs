@@ -12,6 +12,7 @@ namespace CRM_Service.Services.IManagers
     public interface IGeneralManager<T, TI> 
     {
         Task<CRM_Service.Entitys.Response> Create(TI poco);
+        Task<CRM_Service.Entitys.Response> Delete(Int64 Id);
     }
 }
   

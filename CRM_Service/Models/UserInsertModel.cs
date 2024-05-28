@@ -39,6 +39,5 @@ namespace CRM_Service.Models
 
         public int RolUserId { get; set; }
 
-        public Int64 ImageId { get; set; }
     }
 }

@@ -33,18 +33,21 @@ namespace CRM_Service.Context
                 .HasOne(d => d.UploadedByUser)
                 .WithMany()
                 .HasForeignKey(d => d.UploadedByUserId)
+                .IsRequired(false) // Permitir que la clave foránea sea nula
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Image)
                 .WithMany()
                 .HasForeignKey(u => u.ImageId)
+                .IsRequired(false) // Permitir que la clave foránea sea nula
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Signature)
                 .WithMany()
                 .HasForeignKey(u => u.SignatureId)
+                .IsRequired(false) // Permitir que la clave foránea sea nula
                 .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(modelBuilder);

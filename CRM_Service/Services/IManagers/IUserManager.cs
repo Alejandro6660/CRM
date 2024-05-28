@@ -10,7 +10,10 @@ namespace CRM_Service.Services.IManagers
     public interface IUserManager
     {
         Task<CRM_Service.Entitys.Response> CreateRol(RolUserInsertModel value);
+        Task<IEnumerable<RolUserModel>> GetRol();
+        Task<IEnumerable<GetUsersModel>> GetUsers();
         Task<CRM_Service.Entitys.Response> ValidateUserEmail (string email);
+        Task<CRM_Service.Entitys.Response> ValidateUsername (string UserName);
         Task<CRM_Service.Entitys.Response> ValidateUserPhone(string phone);
          Task<UserModel>Login(UserLoginModel login);
     }

@@ -51,7 +51,7 @@ namespace CRM_Service.Services.Managers
             var TokenDescription = new SecurityTokenDescriptor
             {
                 Subject = claims,
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = credentialsToken,
             };
 

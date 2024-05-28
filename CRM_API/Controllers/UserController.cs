@@ -1,6 +1,7 @@
 ﻿using CRM_Service.Entitys;
 using CRM_Service.Models;
 using CRM_Service.Services.IManagers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -21,6 +22,7 @@ namespace CRM_API.Controllers
 
         }
 
+        [Authorize]
         [HttpPost("create")]
         public async Task<ActionResult<Response>> CreateUser(UserInsertModel value)
         {
@@ -34,15 +36,16 @@ namespace CRM_API.Controllers
                 else
                 {
                     var emailValidationResult = await userManager.ValidateUserEmail(value.Email);
+                    var UserValidationName = await userManager.ValidateUsername(value.Phone);
                     var phoneValidationResult = await userManager.ValidateUserPhone(value.Phone);
 
-                    if (string.IsNullOrEmpty(emailValidationResult.Message) && string.IsNullOrEmpty(phoneValidationResult.Message))
+                    if (string.IsNullOrEmpty(emailValidationResult.Message) && string.IsNullOrEmpty(phoneValidationResult.Message) && string.IsNullOrEmpty(UserValidationName.Message))
                     {
                         res = await generalManager.Create(value);
                     }
                     else
                     {
-                        var errorMessage = string.Join("; ", emailValidationResult.Message, phoneValidationResult.Message);
+                        var errorMessage = string.Join("; ", emailValidationResult.Message, phoneValidationResult.Message, UserValidationName.Message);
                         res.Message = errorMessage;
                     }
                 }
@@ -68,6 +71,39 @@ namespace CRM_API.Controllers
                 return BadRequest("Error durante el inicio de sesión: " + ex.Message);
             }
             return us;
+        }
+
+        [Authorize]
+        [HttpDelete("Delete")]
+        public async Task<ActionResult<Response>> Delete(Int64 Id)
+        {
+            var res = new Response();
+            try
+            {
+                res = await generalManager.Delete(Id);
+            }
+            catch (Exception ex)
+            {
+                res.Code = ex.HResult;
+                res.Message = $"Error al crear usuario: {ex.Message}";
+            }
+            return Ok(res);
+        }
+
+        [Authorize]
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IEnumerable<GetUsersModel>>> GetAll()
+        {
+            IEnumerable<GetUsersModel> Users = new List<GetUsersModel>(); // Cambia List<T> a IEnumerable<T>
+            try
+            {
+                Users = await userManager.GetUsers();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok(Users);
         }
     }
 }
